@@ -1,10 +1,8 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"io"
-	"net"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -88,22 +86,21 @@ func TestBridgeErrorsAndAddressValidation(t *testing.T) {
 	}
 }
 
-func TestLocalOnly(t *testing.T) {
-	h := localOnly(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(204) }))
+func TestBrowserSecurity(t *testing.T) {
+	h := browserSecurity(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(204) }))
 	for _, tc := range []struct {
-		host, origin, local string
-		want                int
+		host, origin string
+		want         int
 	}{
-		{"localhost:8080", "http://localhost:8080", "127.0.0.1", 204},
-		{"127.0.0.1:8080", "", "127.0.0.1", 204},
-		{"192.168.1.10:8080", "http://192.168.1.10:8080", "192.168.1.10", 204},
-		{"192.168.1.11:8080", "", "192.168.1.10", 403},
-		{"localhost:8080", "", "192.168.1.10", 403},
-		{"evil.example:8080", "", "127.0.0.1", 403},
-		{"localhost:8080", "https://evil.example", "127.0.0.1", 403},
+		{"localhost:6002", "http://localhost:6002", 204},
+		{"192.168.1.10:6002", "http://192.168.1.10:6002", 204},
+		{"HUE.EXAMPLE.COM:6002", "http://hue.example.com:6002", 204},
+		{"any.example", "", 204},
+		{"any.example", "https://any.example", 204},
+		{"hue.example.com:6002", "http://evil.example:6002", 403},
+		{"localhost:6002", "https://evil.example", 403},
 	} {
-		r := httptest.NewRequest("GET", "http://localhost:8080/", nil)
-		r = r.WithContext(context.WithValue(r.Context(), http.LocalAddrContextKey, &net.TCPAddr{IP: net.ParseIP(tc.local), Port: 8080}))
+		r := httptest.NewRequest("GET", "http://localhost:6002/", nil)
 		r.Host = tc.host
 		if tc.origin != "" {
 			r.Header.Set("Origin", tc.origin)

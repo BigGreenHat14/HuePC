@@ -60,32 +60,17 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/", a.api)
 	mux.Handle("/", http.FileServer(http.FS(web)))
-	server := &http.Server{Addr: "0.0.0.0:6002", Handler: localOnly(mux), ReadHeaderTimeout: 5 * time.Second}
+	server := &http.Server{Addr: "0.0.0.0:6002", Handler: browserSecurity(mux), ReadHeaderTimeout: 5 * time.Second}
 	log.Println("HuePC is listening on 0.0.0.0:6002 (use http://127.0.0.1:6002 or this computer's IP address)")
 	log.Fatal(server.ListenAndServe())
 }
 
-// Accept literal addresses of this connection (or localhost on loopback),
-// preventing DNS rebinding while allowing access from other machines.
-func localOnly(next http.Handler) http.Handler {
+// Permit any Host while retaining same-origin checks for browser requests.
+func browserSecurity(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		host, port, err := net.SplitHostPort(r.Host)
-		local, ok := r.Context().Value(http.LocalAddrContextKey).(*net.TCPAddr)
-		validHost := false
-		if err == nil && ok && port == "6002" {
-			if strings.EqualFold(host, "localhost") {
-				validHost = local.IP.IsLoopback()
-			} else if ip := net.ParseIP(host); ip != nil {
-				validHost = ip.Equal(local.IP)
-			}
-		}
-		if !validHost {
-			http.Error(w, "Invalid host", http.StatusForbidden)
-			return
-		}
 		if origin := r.Header.Get("Origin"); origin != "" {
 			u, err := url.Parse(origin)
-			if err != nil || u.Scheme != "http" || !strings.EqualFold(u.Host, r.Host) {
+			if err != nil || (u.Scheme != "http" && u.Scheme != "https") || !strings.EqualFold(u.Host, r.Host) {
 				http.Error(w, "Invalid origin", http.StatusForbidden)
 				return
 			}

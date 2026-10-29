@@ -10,7 +10,7 @@ Install Go 1.21 or newer, then run:
 go run .
 ```
 
-Open **http://127.0.0.1:8080** on the same computer, or **http://YOUR-COMPUTER-IP:8080** from another device (use the numerical IP address, not a hostname). Find the bridge automatically or enter its private IP, press its physical button, and connect within 30 seconds. The bridge and computer must be able to reach each other on the local network. A v2-capable, up-to-date Hue Bridge is required.
+Open **http://127.0.0.1:6002** on the same computer, or **http://YOUR-COMPUTER-IP:6002** from another device. Any hostname that resolves to the computer can also be used. Find the bridge automatically or enter its private IP, press its physical button, and connect within 30 seconds. The bridge and computer must be able to reach each other on the local network. A v2-capable, up-to-date Hue Bridge is required.
 
 ## Use
 
@@ -21,7 +21,7 @@ Open **http://127.0.0.1:8080** on the same computer, or **http://YOUR-COMPUTER-I
 
 ## Privacy and security
 
-The app listens on `0.0.0.0:8080` without authentication or HTTPS. **Anyone who can reach the port can control the bridge or disconnect it**, and traffic between the browser and app is unencrypted. Use it only on a trusted network, restrict access with your firewall, and do not expose it to the internet. The bridge address and application key are stored in `huepc/config.json` under your OS user configuration directory. Protect your user account and configuration file. Hue bridges use self-signed TLS certificates, so the app does not verify the bridge certificate. Initial bridge registration uses the bridge's HTTP registration endpoint. Discovery sends a request to `discovery.meethue.com`; manual setup does not.
+The app listens on `0.0.0.0:6002` without authentication or HTTPS and accepts any hostname. **Anyone who can reach the port can control the bridge or disconnect it**, and traffic between the browser and app is unencrypted. Accepting any hostname also leaves the app vulnerable to DNS rebinding, so a malicious website could potentially control it through your browser even without direct network access. Restrict access with your firewall and do not expose it to the internet. The bridge address and application key are stored in `huepc/config.json` under your OS user configuration directory. Protect your user account and configuration file. Hue bridges use self-signed TLS certificates, so the app does not verify the bridge certificate. Initial bridge registration uses the bridge's HTTP registration endpoint. Discovery sends a request to `discovery.meethue.com`; manual setup does not.
 
 ## Test
 

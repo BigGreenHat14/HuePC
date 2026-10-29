@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f4">
+  <title>Glow — your lights, in a better light</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5c.8 5.1 3.4 7.7 8.5 8.5-5.1.8-7.7 3.4-8.5 8.5C11.2 14.4 8.6 11.8 3.5 11 8.6 10.2 11.2 7.6 12 2.5Z"/><path d="M19 16v4m-2-2h4"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-7h6v7"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M8 15c-.5-1.3-2.5-2.2-2.5-5a6.5 6.5 0 1 1 13 0c0 2.8-2 3.7-2.5 5H8Zm.5 3h7M10 21h4"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.5 9a7 7 0 0 1 12-2L20 12M4 12l2.5 5a7 7 0 0 0 12-2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.8.5l-.1.2h-4l-.1-.2a1.7 1.7 0 0 0-1.8-.5l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 8 15l-.2-.1v-4l.2-.1a1.7 1.7 0 0 0-.3-1.9l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.8-.5l.1-.2h4l.1.2a1.7 1.7 0 0 0 1.8.5l.2-.1 2 3.4-.1.1a1.7 1.7 0 0 0-.3 1.9l.2.1v4z" transform="translate(-1.6 -1.6) scale(1.13)"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  </svg>
+
+  <div id="app" class="app-shell" hidden>
+    <aside class="sidebar">
+      <a class="brand" href="#home" aria-label="Glow home"><span class="brand-mark"><svg><use href="#i-spark"/></svg></span><span>glow<span class="brand-dot">.</span></span></a>
+      <div class="sidebar-label">YOUR SPACE</div>
+      <nav id="navigation" aria-label="Main navigation"></nav>
+      <div class="sidebar-bottom">
+        <div class="bridge-status"><span class="status-dot"></span><span><strong>Bridge connected</strong><small id="bridge-address"></small></span></div>
+        <button class="nav-item settings-button" id="settings-btn"><svg><use href="#i-settings"/></svg> Settings</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div class="breadcrumb">YOUR HOME <span>/</span> <strong id="breadcrumb">OVERVIEW</strong></div><div class="top-actions"><span class="live-label"><span class="status-dot"></span> BRIDGE ONLINE</span><button class="icon-button" id="refresh-btn" title="Refresh" aria-label="Refresh"><svg><use href="#i-refresh"/></svg></button><button class="icon-button mobile-settings" id="mobile-settings-btn" title="Settings" aria-label="Settings"><svg><use href="#i-settings"/></svg></button><div class="avatar">G</div></div></header>
+      <div class="content" id="content"></div>
+      <footer>MADE FOR YOUR MOMENTS <span>✳</span> GLOW</footer>
+    </main>
+  </div>
+
+  <main id="setup" class="setup" hidden>
+    <div class="setup-brand"><span class="brand-mark"><svg><use href="#i-spark"/></svg></span> glow<span class="brand-dot">.</span></div>
+    <div class="setup-card"><div class="setup-art"><div class="setup-orb"><svg><use href="#i-bulb"/></svg></div><span class="setup-art-label">A LITTLE MORE<br>LIGHT IN YOUR LIFE.</span><span class="setup-art-star">✳</span></div><div class="setup-form"><span class="eyebrow">WELCOME TO GLOW</span><h1>Let’s make<br>yourself at home<span class="accent">.</span></h1><p>Connect your Philips Hue Bridge to bring all your lights together in one beautifully simple space.</p><div class="setup-steps"><div><span>01</span> Make sure your bridge is on the same network.</div><div><span>02</span> Press the round button on your bridge.</div><div><span>03</span> Connect below within 30 seconds.</div></div><label for="bridge-input">BRIDGE IP ADDRESS</label><div class="setup-input-row"><input id="bridge-input" placeholder="e.g. 192.168.1.10" autocomplete="off"><button class="button button-dark" id="connect-btn">Connect bridge <svg><use href="#i-arrow"/></svg></button></div><button class="text-button" id="discover-btn">Find my bridge automatically <span>↗</span></button><div id="setup-message" class="form-message" role="status"></div></div></div><p class="setup-foot">YOUR LIGHTS. YOUR SPACE. YOUR MOMENT.</p>
+  </main>
+
+  <dialog id="dialog"><div id="dialog-content"></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

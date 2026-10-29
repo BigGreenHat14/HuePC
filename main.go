@@ -60,8 +60,8 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/", a.api)
 	mux.Handle("/", http.FileServer(http.FS(web)))
-	server := &http.Server{Addr: "0.0.0.0:8080", Handler: localOnly(mux), ReadHeaderTimeout: 5 * time.Second}
-	log.Println("HuePC is listening on 0.0.0.0:8080 (use http://127.0.0.1:8080 or this computer's IP address)")
+	server := &http.Server{Addr: "0.0.0.0:6002", Handler: localOnly(mux), ReadHeaderTimeout: 5 * time.Second}
+	log.Println("HuePC is listening on 0.0.0.0:6002 (use http://127.0.0.1:6002 or this computer's IP address)")
 	log.Fatal(server.ListenAndServe())
 }
 
@@ -72,7 +72,7 @@ func localOnly(next http.Handler) http.Handler {
 		host, port, err := net.SplitHostPort(r.Host)
 		local, ok := r.Context().Value(http.LocalAddrContextKey).(*net.TCPAddr)
 		validHost := false
-		if err == nil && ok && port == "8080" {
+		if err == nil && ok && port == "6002" {
 			if strings.EqualFold(host, "localhost") {
 				validHost = local.IP.IsLoopback()
 			} else if ip := net.ParseIP(host); ip != nil {
